@@ -2,25 +2,102 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Mi Primera Tienda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Primera Tienda | Juego</title>
+  <style>
+    body {
+      font-family: Comic Sans MS, cursive, sans-serif;
+      background-color: #fceabb;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #e67e22;
+    }
+    button {
+      font-size: 20px;
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #82ccdd;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #60a3bc;
+    }
+    .store, .clients {
+      margin-top: 20px;
+    }
+    .money {
+      font-size: 24px;
+      margin: 20px;
+    }
+  </style>
 </head>
 <body>
+
   <h1>🎯 Mi Primera Tienda</h1>
-  <h2>Edad sugerida:</h2>
-  <p>6-10 años</p>
 
-  <h2>Objetivo:</h2>
-  <p>Administrar una tienda, comprando y vendiendo productos para ganar dinero.</p>
+  <div class="money">
+    Dinero disponible: <span id="money">100</span> 💵
+  </div>
 
-  <h2>Cómo jugar:</h2>
-  <ul>
-    <li>Cada jugador maneja una tienda y recibe billetes de juguete.</li>
-    <li>Compran productos en un mercado común.</li>
-    <li>Venden productos a clientes que aparecen en cartas de eventos.</li>
-    <li>Deben decidir cuánto invertir, cuánto ahorrar y cuándo hacer descuentos.</li>
-  </ul>
+  <div class="store">
+    <h2>Comprar Productos</h2>
+    <button onclick="buy('manzana', 10)">🍎 Manzana ($10)</button>
+    <button onclick="buy('juguete', 20)">🧸 Juguete ($20)</button>
+    <button onclick="buy('ropa', 30)">👕 Ropa ($30)</button>
+  </div>
 
-  <h2>Aprenden:</h2>
-  <p>Administración del dinero, inversión, oferta y demanda.</p>
+  <div class="clients">
+    <h2>Clientes</h2>
+    <button onclick="sell()">👥 ¡Llegó un cliente!</button>
+    <p id="clientMessage"></p>
+  </div>
+
+  <script>
+    let money = 100;
+    let inventory = {
+      manzana: 0,
+      juguete: 0,
+      ropa: 0
+    };
+
+    function updateDisplay() {
+      document.getElementById('money').textContent = money;
+    }
+
+    function buy(product, price) {
+      if (money >= price) {
+        money -= price;
+        inventory[product]++;
+        alert(`¡Compraste una ${product}!`);
+      } else {
+        alert('No tienes suficiente dinero.');
+      }
+      updateDisplay();
+    }
+
+    function sell() {
+      const products = Object.keys(inventory).filter(p => inventory[p] > 0);
+      if (products.length === 0) {
+        document.getElementById('clientMessage').textContent = 'No tienes productos para vender. ¡Compra primero!';
+        return;
+      }
+      const product = products[Math.floor(Math.random() * products.length)];
+      let salePrice = 0;
+      if (product === 'manzana') salePrice = 15;
+      if (product === 'juguete') salePrice = 30;
+      if (product === 'ropa') salePrice = 45;
+
+      inventory[product]--;
+      money += salePrice;
+      document.getElementById('clientMessage').textContent = `¡Vendiste una ${product} por $${salePrice}!`;
+      updateDisplay();
+    }
+  </script>
+
 </body>
 </html>
